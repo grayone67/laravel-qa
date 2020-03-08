@@ -4,6 +4,9 @@ namespace App;
 use Illuminate\Support\Str;
 
 use Illuminate\Database\Eloquent\Model;
+use League\CommonMark\CommonMarkConverter;
+
+
 
 class Question extends Model
 {
@@ -20,6 +23,12 @@ class Question extends Model
     }
 
 
+    public function getUrlAttribute()
+    {
+        return route("questions.show", $this->slug);
+    }
+
+
     public function getStatusAttribute() 
     {
         if ($this->answers > 0) {
@@ -29,6 +38,15 @@ class Question extends Model
             return "answered";
         }
         return "unanswered";
+    }
+
+
+    public function getBodyHtmlAttribute()
+    {
+        $markdown = new CommonMarkConverter(['allow_unsafe_links' => false]);
+
+        return $markdown->convertToHtml($this->body);
+
     }
 
 }
