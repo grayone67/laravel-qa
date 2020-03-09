@@ -50,6 +50,11 @@ public static function boot() {
 
 }
 
+public function getCreatedDateAttribute()
+{
+    return $this->created_at->diffForHumans();
+}
+
 
 
 }
